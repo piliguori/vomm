@@ -380,6 +380,18 @@ class pst(ppm):
         require for a context s to be kept. If not set, we use the value 0.1
 
         """
+        self.d = d
+        self.kl_threshold = kl_threshold
+
+        if freq_threshold == None:
+            freq_threshold = 0.1*alphabet_size
+
+        self.freq_threshold = freq_threshold
+
+        if meaning_threshold == None:
+            meaning_threshold = 2.0/alphabet_size
+
+        self.meaning_threshold = meaning_threshold
 
                 ## Handle multiple 
         def combine_dicts(A, B):
@@ -405,18 +417,7 @@ class pst(ppm):
                                    alphabet_size = self.alphabet_size)
 
        
-        self.d = d
-        self.kl_threshold = kl_threshold
-
-        if freq_threshold == None:
-            freq_threshold = 0.1*alphabet_size
-
-        self.freq_threshold = freq_threshold
-
-        if meaning_threshold == None:
-            meaning_threshold = 2.0/alphabet_size
-
-        self.meaning_threshold = meaning_threshold
+        
 
         counts = count_occurrences(tuple(training_data),d=self.d,
                                    alphabet_size = self.alphabet_size)
