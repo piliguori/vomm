@@ -236,7 +236,7 @@ class ppm:
         while not context in self.pdf_dict:
             context = context[1:]
         
-        return np.argmax(self.pdf_dict[context])
+        return np.argmax(self.pdf_dict[context]), context
     
     def predict_proba(self, context):
         """
@@ -246,8 +246,9 @@ class ppm:
         """
         while not context in self.pdf_dict:
             context = context[1:]
-            
-        return self.pdf_dict[context]
+        
+        
+        return self.pdf_dict[context], context
     
 
     def logpdf(self,observed_data):
