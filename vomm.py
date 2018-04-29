@@ -20,7 +20,7 @@ def find_contexts(training_data, d= 4):
     """
 
     contexts = set()
-
+    
     N = len(training_data)
 
     for k in range(1,d+1):
@@ -47,7 +47,7 @@ def count_occurrences(training_data, d=4, alphabet_size = None):
     and value the counts array.
 
     """
-
+    
     contexts = find_contexts(training_data, d = d)
 
     if alphabet_size == None:
@@ -232,10 +232,11 @@ class ppm:
         
         Ties broken by numpy.argmax
         """
-        
+
         while not context in self.pdf_dict:
             context = context[1:]
-        
+            
+
         return np.argmax(self.pdf_dict[context]), context
     
     def predict_proba(self, context):
@@ -415,7 +416,6 @@ class pst(ppm):
             
             counts = {}
             for td in training_data:
-                
                 tcounts = count_occurrences(tuple(td),d=self.d, alphabet_size = self.alphabet_size)
                 counts = combine_dicts(counts, tcounts)
                  
@@ -424,11 +424,7 @@ class pst(ppm):
             counts = count_occurrences(tuple(training_data),d=self.d,
                                    alphabet_size = self.alphabet_size)
 
-       
-        
 
-        counts = count_occurrences(tuple(training_data),d=self.d,
-                                   alphabet_size = self.alphabet_size)
 
         # Kill all contexts that fail freq_threshold.
         counts = dict([ (s,counts[s]) for s in counts if counts[s].sum() >= self.freq_threshold])
@@ -436,7 +432,7 @@ class pst(ppm):
         self.pdf_dict = compute_ppm_probability(counts)
 
         # K-L is a harsher threshold than meaning threshold. We'll do it first.
-
+     
         # Kill all context that fail Kullback-Leibler divergence
         passed = dict([ (s,kullback_leibler_test(self.pdf_dict,s,self.kl_threshold))
                         for s in self.pdf_dict ])
@@ -451,7 +447,7 @@ class pst(ppm):
 
         # Kill all context that fail meaning threshold.
         passed = dict([ (s,self.pdf_dict[s].max() >= self.meaning_threshold) for s in self.pdf_dict])
-
+    
         # propagate failures from parent to children.
         for k in range(self.d+1):
             for s in passed:
@@ -466,7 +462,7 @@ class pst(ppm):
 
         # For faster look up  when computing logpdf(observed data).
         self.generate_fast_lookup()
-
+       
         return
 
     def __str__(self):
@@ -480,4 +476,11 @@ class pst(ppm):
                           "Kullback-Leibler threshold: %f" % self.kl_threshold])
 
 
+training_data = [[0,1,2],[0,1],[3,4],[0,1],[3,4] ]
+my_model  = pst()
+
+print('h')
+my_model.fit(training_data, d=5)
+print('h2')
+print( my_model.predict((0,1,2)))
 
