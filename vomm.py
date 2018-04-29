@@ -387,10 +387,12 @@ class pst(ppm):
             # we have multiple instances
             if alphabet_size == None:
                 flat_list = [item for sublist in training_data for item in sublist ]
-                self.alphabet_size = max(flat_list) + 1
+                alphabet_size = max(flat_list) + 1
+                self.alphabet_size = alphabet_size
         else:
             if alphabet_size == None:
-                self.alphabet_size = max(training_data) + 1
+                alphabet_size = max(training_data) + 1
+                self.alphabet_size = alphabet_size
                 
         if freq_threshold == None:
             freq_threshold = 0.1*alphabet_size
