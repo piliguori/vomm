@@ -457,6 +457,8 @@ class pst(ppm):
                     passed[s] = False
         self.pdf_dict = dict([(s,self.pdf_dict[s]) for s in self.pdf_dict if passed[s] ])
 
+        if len(self.pdf_dict) == 0:
+            raise Exception('Error in fit. To much pruning occurred and now there is no model... Either change the pruning parameters or pass a larger training set.')
 
         self.logpdf_dict = dict([(x,np.log(self.pdf_dict[x])) for x in self.pdf_dict.keys()])
 
@@ -476,11 +478,5 @@ class pst(ppm):
                           "Kullback-Leibler threshold: %f" % self.kl_threshold])
 
 
-# training_data = [[0,1,2],[0,1],[3,4],[0,1],[3,4] ]
-# my_model  = pst()
-# 
-# print('h')
-# my_model.fit(training_data, d=5)
-# print('h2')
-# print( my_model.predict((0,1,2)))
+
 
