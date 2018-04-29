@@ -204,6 +204,24 @@ class ppm:
         self.generate_fast_lookup()
 
         return
+    
+    def predict(self, context):
+        """
+        Predict method which looks up the probability distribution for
+        the given context and selects the highest probability symbol.
+        
+        Ties broken by numpy.argmax
+        """
+        return np.argmax(self.pdf_dict[context])
+    
+    def predict_proba(self, context):
+        """
+        Returns the probability distribution over next step
+        predictions (symbols). Probabilities correspond to 
+        symbols 0...n, where n is the alphabet_size
+        """
+        return self.pdf_dict[context]
+    
 
     def logpdf(self,observed_data):
         """Call this method after using fitting the model to compute the log of
