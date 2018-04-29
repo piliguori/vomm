@@ -4,6 +4,7 @@ Order Markov Models" by Ron Begleiter, Ran El-Yaniv, and Golan Yona in
 the Journal of Artificial Intelligence Research 22 (2004) 385-421.  """
 
 import numpy as np
+from collections import Counter
 
 def find_contexts(training_data, d= 4):
     """
@@ -193,7 +194,19 @@ class ppm:
         self.alphabet_size = alphabet_size
         self.d = d
 
-        counts = count_occurrences(tuple(training_data),d=self.d,
+        ## Handle multiple 
+        if len(training_data[0]) != 1:
+            # we have multiple instances
+            if alphabet_size == None:
+                flat_list = [item for sublist in training_data for item in sublist ]
+                self.alphabet_size = max(flat_list) + 1
+            
+            counts = Counter({})
+            for td in training_data:
+                counts += Counter(count_occurrences(tuple(td),d=self.d, alphabet_size = self.alphabet_size))
+        
+        else:
+            counts = count_occurrences(tuple(training_data),d=self.d,
                                    alphabet_size = self.alphabet_size)
 
         self.pdf_dict = compute_ppm_probability(counts)
