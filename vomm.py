@@ -232,6 +232,10 @@ class ppm:
         
         Ties broken by numpy.argmax
         """
+        
+        while not context in self.pdf_dict:
+            context = context[1:]
+        
         return np.argmax(self.pdf_dict[context])
     
     def predict_proba(self, context):
@@ -240,6 +244,9 @@ class ppm:
         predictions (symbols). Probabilities correspond to 
         symbols 0...n, where n is the alphabet_size
         """
+        while not context in self.pdf_dict:
+            context = context[1:]
+            
         return self.pdf_dict[context]
     
 
