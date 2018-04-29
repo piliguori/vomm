@@ -208,11 +208,8 @@ class ppm:
             for td in training_data:
                 
                 tcounts = count_occurrences(tuple(td),d=self.d, alphabet_size = self.alphabet_size)
-                
-                
                 counts = combine_dicts(counts, tcounts)
-                print(tcounts)
-                print(counts)  
+
         else:
             if alphabet_size == None:
                 self.alphabet_size = max(training_data) + 1
@@ -391,11 +388,8 @@ class pst(ppm):
             for td in training_data:
                 
                 tcounts = count_occurrences(tuple(td),d=self.d, alphabet_size = self.alphabet_size)
-                
-                
                 counts = combine_dicts(counts, tcounts)
-                print(tcounts)
-                print(counts)  
+                 
         else:
             if alphabet_size == None:
                 self.alphabet_size = max(training_data) + 1
