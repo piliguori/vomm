@@ -383,6 +383,15 @@ class pst(ppm):
         self.d = d
         self.kl_threshold = kl_threshold
 
+        if len(training_data[0]) != 1:
+            # we have multiple instances
+            if alphabet_size == None:
+                flat_list = [item for sublist in training_data for item in sublist ]
+                self.alphabet_size = max(flat_list) + 1
+        else:
+            if alphabet_size == None:
+                self.alphabet_size = max(training_data) + 1
+                
         if freq_threshold == None:
             freq_threshold = 0.1*alphabet_size
 
@@ -400,9 +409,7 @@ class pst(ppm):
         
         if len(training_data[0]) != 1:
             # we have multiple instances
-            if alphabet_size == None:
-                flat_list = [item for sublist in training_data for item in sublist ]
-                self.alphabet_size = max(flat_list) + 1
+            
             
             counts = {}
             for td in training_data:
@@ -411,8 +418,7 @@ class pst(ppm):
                 counts = combine_dicts(counts, tcounts)
                  
         else:
-            if alphabet_size == None:
-                self.alphabet_size = max(training_data) + 1
+            
             counts = count_occurrences(tuple(training_data),d=self.d,
                                    alphabet_size = self.alphabet_size)
 
