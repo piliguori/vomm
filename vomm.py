@@ -232,7 +232,7 @@ class ppm:
         
         Ties broken by numpy.argmax
         """
-
+        context = tuple(context)
         while not context in self.pdf_dict:
             context = context[1:]
             
@@ -245,6 +245,7 @@ class ppm:
         predictions (symbols). Probabilities correspond to 
         symbols 0...n, where n is the alphabet_size
         """
+        context = tuple(context)
         while not context in self.pdf_dict:
             context = context[1:]
         
@@ -379,7 +380,6 @@ class pst(ppm):
         kl_threshold sets the minimum distance between the probability
         distributions for child s and suffix parent s' contexts we
         require for a context s to be kept. If not set, we use the value 0.1
-
         """
         self.d = d
         self.kl_threshold = kl_threshold
