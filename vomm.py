@@ -188,24 +188,34 @@ class ppm:
         will be inferred from the training data.
         """
 
-        if alphabet_size == None:
-            alphabet_size = max(training_data) + 1
+        
 
         self.alphabet_size = alphabet_size
         self.d = d
 
         ## Handle multiple 
+        def combine_dicts(A, B):
+            c = {x: A.get(x, 0) + B.get(x, 0) for x in set(A).union(B)}
+            return c
+        
         if len(training_data[0]) != 1:
             # we have multiple instances
             if alphabet_size == None:
                 flat_list = [item for sublist in training_data for item in sublist ]
                 self.alphabet_size = max(flat_list) + 1
             
-            counts = Counter({})
+            counts = {}
             for td in training_data:
-                counts += Counter(count_occurrences(tuple(td),d=self.d, alphabet_size = self.alphabet_size))
-        
+                
+                tcounts = count_occurrences(tuple(td),d=self.d, alphabet_size = self.alphabet_size)
+                
+                
+                counts = combine_dicts(counts, tcounts)
+                print(tcounts)
+                print(counts)  
         else:
+            if alphabet_size == None:
+                self.alphabet_size = max(training_data) + 1
             counts = count_occurrences(tuple(training_data),d=self.d,
                                    alphabet_size = self.alphabet_size)
 
@@ -366,10 +376,33 @@ class pst(ppm):
 
         """
 
-        if alphabet_size == None:
-            alphabet_size = max(training_data) + 1
+                ## Handle multiple 
+        def combine_dicts(A, B):
+            c = {x: A.get(x, 0) + B.get(x, 0) for x in set(A).union(B)}
+            return c
+        
+        if len(training_data[0]) != 1:
+            # we have multiple instances
+            if alphabet_size == None:
+                flat_list = [item for sublist in training_data for item in sublist ]
+                self.alphabet_size = max(flat_list) + 1
+            
+            counts = {}
+            for td in training_data:
+                
+                tcounts = count_occurrences(tuple(td),d=self.d, alphabet_size = self.alphabet_size)
+                
+                
+                counts = combine_dicts(counts, tcounts)
+                print(tcounts)
+                print(counts)  
+        else:
+            if alphabet_size == None:
+                self.alphabet_size = max(training_data) + 1
+            counts = count_occurrences(tuple(training_data),d=self.d,
+                                   alphabet_size = self.alphabet_size)
 
-        self.alphabet_size = alphabet_size
+       
         self.d = d
         self.kl_threshold = kl_threshold
 
@@ -434,3 +467,6 @@ class pst(ppm):
                           "Frequency threshold: %f" % self.freq_threshold,
                           "Meaning threshold: %f" % self.meaning_threshold,
                           "Kullback-Leibler threshold: %f" % self.kl_threshold])
+
+
+
