@@ -476,11 +476,11 @@ class pst(ppm):
                           "Kullback-Leibler threshold: %f" % self.kl_threshold])
 
 
-training_data = [[0,1,2],[0,1],[3,4],[0,1],[3,4] ]
-my_model  = pst()
-
-print('h')
-my_model.fit(training_data, d=5)
-print('h2')
-print( my_model.predict((0,1,2)))
+# training_data = [[0,1,2],[0,1],[3,4],[0,1],[3,4] ]
+# my_model  = pst()
+# 
+# print('h')
+# my_model.fit(training_data, d=5)
+# print('h2')
+# print( my_model.predict((0,1,2)))
 
