@@ -237,7 +237,7 @@ class ppm:
             context = context[1:]
             
 
-        return np.argmax(self.pdf_dict[context]), context
+        return np.argmax(self.pdf_dict[context])
     
     def predict_proba(self, context):
         """
