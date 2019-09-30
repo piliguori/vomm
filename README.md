@@ -37,7 +37,7 @@ my_model = vomm.ppm()
 ```{python}
 import vomm
 my_model  = vomm.ppm()
-my_model.fit(training_data, d=2, alphabet_size)
+my_model.fit(training_data, d=2, alphabet_size=None)
 ```
 
 
@@ -61,6 +61,7 @@ If the observed sequence can contain symbols never seen in the training sequence
 ```{python}
 flat_list = [item for sublist in training_data for item in sublist ]
 alphabet_size = max( max(flat_list) + 1, max(observed_sequence) +1 )
+my_model.fit(training_data, d=2, alphabet_size=alphabet_size)
 ```
 
 
