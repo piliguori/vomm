@@ -14,31 +14,62 @@ The algorithms are implemented in a python module called vomm.py
 
 Using either class to learn a model consists of several steps:
 
-1. Acquire training data. The data needs to be represented as an array of integers $(x_t)$ with the constraint  $0 <=  x_t < \text{alphabet size}$. An example:
+1. Acquire training data. The training data needs to be represented as a list of lists, where each list is an array of integers representung a training sequence. 
+
+Example 1:
+```{python}
+training_data = [[1,5,6,7,18],[1,6,7,15,30],[2,3,4,5]]
+```
+
+Example 2:
 ```{python}
 # Take a string and convert each character to its ordinal value.
-training_data = [ord(x) for x in "abracadabra" ]
+training_data = [[ord(x) for x in "abracadabra"]]
 ```
+
 2. Instantiate an object of the appropriate class. Example:
 ```{python}
 import vomm
 my_model = vomm.ppm()
 ```
+
 3. Learn a model from the data.
 ```{python}
 import vomm
 my_model  = vomm.ppm()
-my_model.fit(training_data, d=2)
+my_model.fit(training_data, d=2, alphabet_size)
 ```
 
-Once you have learned a model from training you can do 2 things directly:
 
-1. Compute the log of the probability of an observed sequence based on
-model's parameters. The observed sequence has to be a sequence of integers $(x_t)$ just like the training data with the same constraints on $x_t$. For example:
+```{python}
+max_training = list(map(max, training_data))
+alphabet_size = max(max(max_training)+1, max(observed_sequence)+1)
+```
+
+Once you have learned a model from training, you can:
+
+1. Compute the log of the probability of an observed sequence based on model's parameters:
 ```{python}
 my_model.logpdf(observed_sequence)
 ```
-2. Generate new data from the model of a specified length. For example
+The observed sequence has to be a sequence of integers $(x_t)$ just like the training data. For example:
+```{python}
+observed_sequence = [1,2,2,3,4,5]
+```
+
+If the observed sequence can contain symbols never seen in the training sequence, you need to define the alphabet_size:
+```{python}
+flat_list = [item for sublist in training_data for item in sublist ]
+alphabet_size = max( max(flat_list) + 1, max(observed_sequence) +1 )
+```
+
+
+2. Compute the probability of each element of an observed sequence based on model's parameters:
+```{python}
+my_model.pdf(observed_sequence)
+```
+
+3. Generate new data from the model of a specified length. For example
 ```{python}
 my_model.generate_data(length=300)
 ```
