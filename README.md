@@ -52,7 +52,7 @@ Once you have learned a model from training, you can:
 ```{python}
 my_model.logpdf(observed_sequence)
 ```
-The observed sequence has to be a sequence of integers $(x_t)$ just like the training data. For example:
+The observed sequence has to be a sequence of integers. For example:
 ```{python}
 observed_sequence = [1,2,2,3,4,5]
 ```
