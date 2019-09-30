@@ -209,17 +209,15 @@ class ppm:
                 
                 tcounts = count_occurrences(tuple(td),d=self.d, alphabet_size = self.alphabet_size)
                 counts = combine_dicts(counts, tcounts)
-
         else:
             if alphabet_size == None:
                 self.alphabet_size = max(training_data) + 1
             counts = count_occurrences(tuple(training_data),d=self.d,
                                    alphabet_size = self.alphabet_size)
-
         self.pdf_dict = compute_ppm_probability(counts)
 
         self.logpdf_dict = dict([(x,np.log(self.pdf_dict[x])) for x in self.pdf_dict.keys()])
-
+	self.pdf_dict = dict([(x,np.array(self.pdf_dict[x])) for x in self.pdf_dict.keys()])
         # For faster look up  when computing logpdf(observed data).
         self.generate_fast_lookup()
 
@@ -264,6 +262,7 @@ class ppm:
         # start with the null context and work my way forward.
 
         logprob = 0.0
+	prob = []
         for t in range(len(temp)):
             chunk = temp[max(t-self.d,0):t]
             sigma = temp[t]
@@ -271,6 +270,26 @@ class ppm:
             logprob += self.logpdf_dict[context][sigma]
 
         return logprob
+
+    def pdf(self,observed_data):
+        """Call this method after using fitting the model to compute the log of
+        the probability of an observed sequence of data.
+
+        observed_data should be a sequence of symbols represented by
+        integers 0 <= x < alphabet_size. """
+
+        temp = tuple(observed_data)
+        # start with the null context and work my way forward.
+
+        logprob = 0.0
+	prob = []
+        for t in range(len(temp)):
+            chunk = temp[max(t-self.d,0):t]
+            sigma = temp[t]
+            context = find_largest_context(chunk,self.context_child,self.d)
+	    prob.append(self.pdf_dict[context][sigma])
+
+	return prob
 
     def generate_data(self,prefix=None, length=200):
         """Generates data from the fitted model.
@@ -461,7 +480,7 @@ class pst(ppm):
             raise Exception('Error in fit. To much pruning occurred and now there is no model... Either change the pruning parameters or pass a larger training set.')
 
         self.logpdf_dict = dict([(x,np.log(self.pdf_dict[x])) for x in self.pdf_dict.keys()])
-
+	self.pdf_dict = dict([(x,np.array(self.pdf_dict[x])) for x in self.pdf_dict.keys()])
         # For faster look up  when computing logpdf(observed data).
         self.generate_fast_lookup()
        
